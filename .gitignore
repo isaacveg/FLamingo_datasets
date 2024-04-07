@@ -1,0 +1,16 @@
+_deprecated/
+**/__pycache__/
+*.npz
+datasets/
+datasets/**/train/
+datasets/**/test/
+datasets/**/rawdata/
+datasets/**/config.json
+configs/*
+!configs/template.yaml
+analysis_tools/**/
+dist/
+*.egg-info/
+build/
+
+
