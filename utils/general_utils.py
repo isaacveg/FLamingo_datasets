@@ -20,7 +20,9 @@ def split_train_test(indices, train_ratio=0.8):
     te = indices[int(len(indices)*train_ratio):]
     return tr, te
 
-def get_stat(dataset_label, train_idx, test_idx):
+def get_stat_image(dataset_label, train_idx, test_idx):
+    """Get stat for image classification datasets.
+    """
     stats = {}
     full_set = np.concatenate([train_idx, test_idx])
     train_set = dataset_label[train_idx]
@@ -35,18 +37,23 @@ def get_stat(dataset_label, train_idx, test_idx):
     stats['test_class_distribution'] = {i: int(sum(test_set == i)) for i in np.unique(test_set).tolist()}
     return stats
     
-def save_stats_json(dataset_type, stats, outdir, alpha, least_samples, dist, blc, cc, num_clients, seed):
+def save_stats_json(dataset_type, stats, outdir, 
+                    alpha=None, least_samples=None, 
+                    dist=None, blc=None, cc=None, 
+                    num_clients=None, seed=None):
     """Save stats to json file. 
     """
     all_stats = {}
     all_stats['dataset_type'] = dataset_type
-    all_stats['alpha'] = alpha
-    all_stats['least_samples'] = least_samples
-    all_stats['distribution'] = dist
-    all_stats['balance'] = blc
-    all_stats['class_per_clients'] = cc
-    all_stats['num_clients'] = num_clients
-    all_stats['seed'] = seed
+    if alpha: all_stats['alpha'] = alpha
+    if least_samples: all_stats['least_samples'] = least_samples
+    if dist: all_stats['distribution'] = dist
+    if blc: all_stats['balance'] = blc
+    if cc: all_stats['class_per_clients'] = cc
+    if num_clients: all_stats['num_clients'] = num_clients
+    if seed: all_stats['seed'] = seed
+    all_stats['total_train_size'] = sum([stat['train_size'] for k,stat in stats.items()])
+    all_stats['total_test_size'] = sum([stat['test_size'] for k,stat in stats.items()])
     all_stats['client_stats'] = stats
     with open(os.path.join(outdir, 'stats.json'), 'w') as f:
         json.dump(all_stats, f, indent=4)

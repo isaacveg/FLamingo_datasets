@@ -7,7 +7,7 @@ from argparse import ArgumentParser
 import os
 import numpy as np
 
-from utils.general_utils import subset_data, split_train_test, get_stat, save_stats_json
+from utils.general_utils import subset_data, split_train_test, get_stat_image, save_stats_json
 
 
 if __name__ == '__main__':
@@ -89,7 +89,7 @@ if __name__ == '__main__':
     for i in range(num_clients):
         train_idx, test_idx = split_train_test(map_dict[i], train_ratio=0.8)
         # get stats
-        stats[i+1] = get_stat(dataset_label, train_idx, test_idx)
+        stats[i+1] = get_stat_image(dataset_label, train_idx, test_idx)
         # save data
         np.savez_compressed(os.path.join(train_dir, f'{i+1}.npz'), 
                             data=dataset_image[train_idx], 

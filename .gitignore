@@ -1,6 +1,8 @@
 _deprecated/
 **/__pycache__/
 *.npz
+**/data/
+**/meta/
 datasets/
 datasets/**/train/
 datasets/**/test/
