@@ -13,6 +13,7 @@ from utils.nlp_utils import word_to_indices, letter_to_index
 def process_x(raw_x_batch):
     x_batch = [word_to_indices(word) for word in raw_x_batch]
     x_batch = np.array(x_batch)
+    # print("x_batch: ", len(x_batch))
     return x_batch
 
 def process_y(raw_y_batch):
@@ -61,23 +62,31 @@ if __name__ == '__main__':
     test_files = os.listdir(raw_test_dir)
     train_file = os.path.join(raw_train_dir, train_files[0])
     test_file = os.path.join(raw_test_dir, test_files[0])
+    print(train_file, test_file)
     
     # the files are in json format
     # we use ['user_data'] and ['x'], ['y'] to transform the data
     with open(train_file) as f:
         raw_train_data = json.load(f)
+        print(raw_train_data['num_samples'])
     with open(test_file) as f:
         raw_test_data = json.load(f)
+        print(raw_test_data['num_samples'])
 
     train_data_ = []
     train_data_len = []
     test_data_ = []
+    test_data_len = []
 
     for k, v in raw_train_data['user_data'].items():
         train_data_.append({'x': process_x(v['x']), 'y': process_y(v['y'])})
         train_data_len.append(len(train_data_[-1]['x']))
+    i=0
     for k, v in raw_test_data['user_data'].items():
+        print(i:=i+1 ,len(v['x']), len(v['y']))
         test_data_.append({'x': process_x(v['x']), 'y': process_y(v['y'])})
+        test_data_len.append(len(test_data_[-1]['x']))
+        # print(len(test_data_[-1]['x']))
         
     train_data = []
     test_data = []
@@ -86,6 +95,7 @@ if __name__ == '__main__':
     for ind in inds:
         train_data.append(train_data_[ind])
         test_data.append(test_data_[ind])
+        # print(train_data_len[ind], test_data_len[ind], len(train_data[-1]['x']), len(test_data[-1]['x']))
     
     stats = {}
     for idx, train_dict in enumerate(train_data):
