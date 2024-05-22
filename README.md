@@ -14,9 +14,22 @@ Examples belew are: --nc 30 clients, --dist distribution is iid, --blc balance c
 
 - [x] CIFAR-10    
 ```bash
-python cifar10.py --nc 30 --dist iid --blc 1 --seed 2048 --cc 5 --alpha 0.1 --least_samples 10 --indir ../datasets/ --outdir ../datasets/
+python gen_cifar10.py --nc 30 --dist iid --blc 1 --seed 2048 --cc 5 --alpha 0.1 --least_samples 10 --indir ../datasets/ --outdir ../datasets/
 ```
-- [ ] CIFAR-100
+- [x] CIFAR-100
+```bash
+python gen_cifar100.py --nc 30 --dist iid --blc 1 --seed 2048 --cc 10 --alpha 0.1 --least_samples 10 --indir ../datasets/ --outdir ../datasets/
+```
+- [x] Leaf-Shakespeare
+Warning: due to Shakespeare dataset's characteristics, you need to figure out how to avoid the situation that one client may have 3 test samples. Use --minimum_test_samples to prevent such extreme situation.
+```bash
+cd ./utils/leaf_scripts/shakespeare
+sudo find . -type f -name "*.sh" -exec chmod +x {} +    # set all scripts runnable
+./preprocess.sh -s niid --sf 0.2 -k 0 -t sample -tf 0.9
+python gen_shakespeare.py --seed 2048 --indir ../datasets/ --outdir ../datasets/ --minimum_test_samples 50
+```
+- [x] Leaf-FEMNIST
+
 - [ ] MNIST
 - [ ] Fashion-MNIST
 - [ ] EMNIST
@@ -25,5 +38,8 @@ python cifar10.py --nc 30 --dist iid --blc 1 --seed 2048 --cc 5 --alpha 0.1 --le
 
 
 ## Contributing
+There are some pre-implemented spliting functions in utils/general_utils. 
+You can use them to do your own partition.
+
 Feel free to contribute to this repository by opening a pull request.    
 Or requesting a new dataset by opening an issue.

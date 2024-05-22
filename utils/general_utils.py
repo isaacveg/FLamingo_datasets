@@ -30,7 +30,7 @@ def get_stat_image(dataset_label, train_idx, test_idx):
     stats['size'] = len(full_set)
     stats['train_size'] = len(train_idx)
     stats['test_size'] = len(test_idx)
-    stats['num_classes'] = len(np.unique(train_set))
+    stats['num_classes'] = len(np.unique(full_set))
     stats['num_train_classes'] = len(np.unique(train_set))
     stats['num_test_classes'] = len(np.unique(test_set))
     stats['train_class_distribution'] = {i: int(sum(train_set == i)) for i in np.unique(train_set).tolist()}
