@@ -12,12 +12,12 @@ from utils.general_utils import get_stat_image, save_stats_json
 
 
 def process_x(raw_data):
-    """Transform original 1-D list to 28*28 np array.
+    """Transform original 2-D list to a list of 28*28 np array.
     """
-    x = np.array(raw_data)
-    x = x.reshape(-1, 28, 28)
-    x = x.astype(np.float32)
-    return x
+    # raw_data be like: [[784], [784]] --> [ [28*28] [28*28]]
+    samples = np.array([np.array(raw_data[i]).reshape(1, 28, 28) for i in range(len(raw_data))])
+    # print(samples.shape)
+    return samples
     
 def get_stat(train_dict, test_dict):
     """Get stat for image classification datasets.
@@ -84,6 +84,8 @@ if __name__ == '__main__':
     
     # the files are in json format
     # Travel over the json files and load them into a big dict-like object
+    # raw_train_data should be like: {'username': {'x': [], 'y': []}}
+    # the json files are like: {'users':[a list of user names], 'user_data': {'username': {'x': [[],[]...], 'y': []}}}
     raw_train_data = {}
     raw_test_data = {}
     raw_users = []
@@ -106,6 +108,7 @@ if __name__ == '__main__':
     test_data_ = []
     test_data_len = []
 
+    # train_data_ should be like: [{'x': np.array [[],[]], 'y': np.array}] including all data
     for user in raw_users:
         train_data_.append({'x': process_x(raw_train_data[user]['x']), 'y': np.array(raw_train_data[user]['y'])})
         test_data_.append({'x': process_x(raw_test_data[user]['x']), 'y': np.array(raw_test_data[user]['y'])})
@@ -162,10 +165,10 @@ if __name__ == '__main__':
         temp_stat['writers'] = users_mappings[i]
         np.savez_compressed(os.path.join(train_dir, f'{idx+1}.npz'), 
                             data=train_dict['x'],
-                            target=train_dict['y'])
+                            targets=train_dict['y'])
         np.savez_compressed(os.path.join(test_dir, f'{idx+1}.npz'), 
                             data=test_dict['x'], 
-                            target=test_dict['y'])
+                            targets=test_dict['y'])
         stats[idx+1] = temp_stat
         idx += 1
     print(f"Data saved in {outdir}, total {idx} clients generated.")
