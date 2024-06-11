@@ -10,6 +10,7 @@ import numpy as np
 
 from utils.general_utils import save_stats_json
 from utils.nlp_utils import word_to_indices, letter_to_index
+from utils.visualize_utils import plot_class_distribution_byclient
 
 def process_x(raw_x_batch):
     x_batch = [word_to_indices(word) for word in raw_x_batch]
@@ -115,10 +116,11 @@ if __name__ == '__main__':
                             data=train_dict['x'], 
                             targets=train_dict['y'])
         np.savez_compressed(os.path.join(test_dir, f'{idx+1}.npz'), 
-                            data=test_data[idx]['x'], 
-                            targets=test_data[idx]['y'])
+                            data=test_data[i]['x'], 
+                            targets=test_data[i]['y'])
         idx += 1
         
     save_stats_json('shakespeare', stats, outdir, seed=seed, dist='niid', num_clients=idx)
     print(f"Data saved in {outdir}")
+    # plot_class_distribution_byclient(outdir)
     print("Dataset generated successfully!")

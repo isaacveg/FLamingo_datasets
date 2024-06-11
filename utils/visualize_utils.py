@@ -127,6 +127,6 @@ def plot_class_distribution_byclass(file_path):
 
 # plot_class_distribution(data)
 # plot_class_distribution('.')
-filename = sys.argv[1]
+# filename = sys.argv[1]
 # plot_class_distribution_byclass(filename)
-plot_class_distribution_byclient(filename)
+# plot_class_distribution_byclient(filename)

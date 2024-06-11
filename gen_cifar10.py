@@ -8,6 +8,7 @@ import os
 import numpy as np
 
 from utils.general_utils import subset_data, split_train_test, get_stat_image, save_stats_json
+from utils.visualize_utils import plot_class_distribution_byclient
 
 
 if __name__ == '__main__':
@@ -100,5 +101,5 @@ if __name__ == '__main__':
         
     save_stats_json('cifar10', stats, outdir, alpha, least_samples, dist, blc, cc, num_clients, seed)
     print(f"Data saved in {outdir}")
-    
+    plot_class_distribution_byclient(outdir)
     print("Dataset generated successfully!")

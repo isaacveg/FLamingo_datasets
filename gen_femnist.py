@@ -9,6 +9,7 @@ import os
 import numpy as np
 
 from utils.general_utils import get_stat_image, save_stats_json
+from utils.visualize_utils import plot_class_distribution_byclient
 
 
 def process_x(raw_data):
@@ -173,4 +174,5 @@ if __name__ == '__main__':
         idx += 1
     print(f"Data saved in {outdir}, total {idx} clients generated.")
     save_stats_json('femnist', stats, outdir, seed=seed, dist='niid', num_clients=idx)
+    plot_class_distribution_byclient(outdir)
     print("Dataset generated successfully!")
