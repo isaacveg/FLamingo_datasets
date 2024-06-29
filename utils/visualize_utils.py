@@ -125,8 +125,9 @@ def plot_class_distribution_byclass(file_path):
     plt.savefig(os.path.join(file_path,'class_distribution.png'))
     # plt.show()
 
-# plot_class_distribution(data)
-# plot_class_distribution('.')
-# filename = sys.argv[1]
-# plot_class_distribution_byclass(filename)
-# plot_class_distribution_byclient(filename)
+if __name__ == '__main__':
+    # plot_class_distribution(data)
+    # plot_class_distribution('.')
+    filename = sys.argv[1]
+    # plot_class_distribution_byclass(filename)
+    plot_class_distribution_byclient(filename)
