@@ -12,11 +12,12 @@ from utils.general_utils import get_stat_image, save_stats_json
 from utils.visualize_utils import plot_class_distribution_byclient
 
 
-def process_x(raw_data):
+def process_x(raw_data, p):
     """Transform original 2-D list to a list of 28*28 np array.
     """
     # raw_data be like: [[784], [784]] --> [ [28*28] [28*28]]
-    samples = np.array([np.array(raw_data[i]).reshape(1, 28, 28) for i in range(len(raw_data))])
+    d_type = np.float32 if p==32 else np.float64
+    samples = np.array([np.array(raw_data[i], dtype=d_type).reshape(1, 28, 28) for i in range(len(raw_data))])
     # print(samples.shape)
     return samples
     
@@ -46,6 +47,7 @@ if __name__ == '__main__':
     # Choose how many writers for one client. Default is 2.
     parser.add_argument('-nw', '--num_writers', type=int, default=2, help='Choose how many writers on single client.')
     parser.add_argument('-mts', '--minimum_test_samples', type=int, default=0, help='Minimum number of test samples for a client')
+    parser.add_argument('-p','--precision', type=int, default=32, choices=[32, 64], help='precision of the data, the original data would be float64, you should check carefully')
     # usage: bash ./preprocess.sh -s niid --sf 0.2 -k 0 -t sample -tf 0.8
     # non-iid, select 20% percent of clients, keep clients with at least 0 samples, train-test split 80-20
     # Make sure to delete the rem_user_data, sampled_data, test, and train subfolders in the data directory before re-running preprocess.sh
@@ -111,8 +113,8 @@ if __name__ == '__main__':
 
     # train_data_ should be like: [{'x': np.array [[],[]], 'y': np.array}] including all data
     for user in raw_users:
-        train_data_.append({'x': process_x(raw_train_data[user]['x']), 'y': np.array(raw_train_data[user]['y'])})
-        test_data_.append({'x': process_x(raw_test_data[user]['x']), 'y': np.array(raw_test_data[user]['y'])})
+        train_data_.append({'x': process_x(raw_train_data[user]['x'], args.precision), 'y': np.array(raw_train_data[user]['y'])})
+        test_data_.append({'x': process_x(raw_test_data[user]['x'], args.precision), 'y': np.array(raw_test_data[user]['y'])})
         
     # merge some clients according to args.num_writers
     users_mappings = []
