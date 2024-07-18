@@ -30,7 +30,7 @@ if __name__ == '__main__':
     parser.add_argument('--seed', type=int, default=2048, help='random seed')
     parser.add_argument('--indir', type=str, default='./utils/leaf_scripts/shakespeare/data/', help='input dataset directory')
     parser.add_argument('--outdir', type=str, default='../datasets/', help='output dataset directory')
-    parser.add_argument('-mt', '--minimum_test_samples', type=int, default=0, help='minimum number of test samples per client')
+    parser.add_argument('-mts', '--minimum_test_samples', type=int, default=0, help='minimum number of test samples per client')
     # usage: bash ./preprocess.sh -s niid --sf 0.2 -k 0 -t sample -tf 0.8
     # non-iid, select 20% percent of clients, keep clients with at least 0 samples, train-test split 80-20
     # Make sure to delete the rem_user_data, sampled_data, test, and train subfolders in the data directory before re-running preprocess.sh

@@ -1,4 +1,5 @@
 # Generate CIFAR-10 dataset for Federated Learning settings.
+from regex import F
 from torchvision import datasets, transforms
 from torchvision.datasets import CIFAR10
 import torch
@@ -38,7 +39,13 @@ if __name__ == '__main__':
     np.random.seed(seed)
     torch.manual_seed(seed)
     
-    outdir = os.path.join(outdir, f'cifar10_nc{num_clients}_dist{dist}_blc{blc}')
+    if dist == 'dir':
+        dist_str = dist + f'{alpha}'
+    elif dist == 'cls':
+        dist_str = dist + f'{cc}'
+    else:
+        dist_str = dist
+    outdir = os.path.join(outdir, f'cifar10_nc{num_clients}_dist{dist_str}_blc{blc}')
     train_dir = os.path.join(outdir, 'train')
     test_dir = os.path.join(outdir, 'test')
     if not os.path.exists(outdir):

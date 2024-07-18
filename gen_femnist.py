@@ -45,7 +45,8 @@ if __name__ == '__main__':
     parser.add_argument('--indir', type=str, default='./utils/leaf_scripts/femnist/data/', help='input dataset directory')
     parser.add_argument('--outdir', type=str, default='../datasets/', help='output dataset directory')
     # Choose how many writers for one client. Default is 2.
-    parser.add_argument('-nw', '--num_writers', type=int, default=2, help='Choose how many writers on single client.')
+    parser.add_argument('--nc', type=int, default=50, help='number of clients')
+    parser.add_argument('-nw', '--num_writers', type=int, default=1, help='Choose how many writers on single client.')
     parser.add_argument('-mts', '--minimum_test_samples', type=int, default=0, help='Minimum number of test samples for a client')
     parser.add_argument('-p','--precision', type=int, default=32, choices=[32, 64], help='precision of the data, the original data would be float64, you should check carefully')
     # usage: bash ./preprocess.sh -s niid --sf 0.2 -k 0 -t sample -tf 0.8
@@ -160,6 +161,7 @@ if __name__ == '__main__':
     
     stats = {}
     idx = 0
+    # client_cnt = 0
     for i, train_dict in enumerate(train_data):
         if len(test_data[i]['y']) < args.minimum_test_samples:
             continue
@@ -174,6 +176,8 @@ if __name__ == '__main__':
                             targets=test_dict['y'])
         stats[idx+1] = temp_stat
         idx += 1
+        if idx >= num_clients:
+            break
     print(f"Data saved in {outdir}, total {idx} clients generated.")
     save_stats_json('femnist', stats, outdir, seed=seed, dist='niid', num_clients=idx)
     plot_class_distribution_byclient(outdir)
